@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vòng Quay May Mắn - Trúng Thưởng QR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .heading-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Fireworks animation simulator */
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.8)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(239, 68, 68, 0.9)); }
+        }
+        .glow-effect {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer-btn {
+            background: linear-gradient(90deg, #f59e0b 0%, #ef4444 50%, #f59e0b 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2.5s infinite;
+        }
+
+        /* Confetti particle simulation background */
+        .confetti-bg {
+            background-color: #0f172a;
+            background-image: radial-gradient(#f59e0b 1px, transparent 1px), radial-gradient(#ef4444 1px, #0f172a 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+
+        .alert-bg {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-yellow-500 selection:text-black">
+
+    <!-- STAGE 1: FAKE PRIZE PHISHING SIMULATION -->
+    <div id="stage-phishing" class="min-h-screen w-full confetti-bg flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+        
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-500 via-red-500 to-amber-500"></div>
+        <div class="absolute -top-24 -left-24 w-72 h-72 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <main class="max-w-xl w-full bg-slate-900/90 border-2 border-yellow-500/50 rounded-3xl shadow-2xl backdrop-blur-xl p-6 sm:p-8 my-6 relative z-10 text-center">
+            
+            <!-- Banner Header -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 font-bold text-xs uppercase tracking-wider mb-4 animate-bounce">
+                <i class="fa-solid fa-gift"></i> Chương Trình Tri Ân Khách Hàng 2026
+            </div>
+
+            <!-- Big Prize Title -->
+            <h1 class="heading-font text-2xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 leading-tight mb-2 uppercase">
+                🎉 CHÚC MỪNG BẠN! 🎉
+            </h1>
+            <p class="text-slate-300 font-medium text-sm sm:text-base mb-4">
+                Mã QR may mắn của bạn đã trúng phần thưởng đặc biệt:
+            </p>
+
+            <!-- Prize Amount Box -->
+            <div class="glow-effect bg-gradient-to-br from-red-600 via-amber-600 to-yellow-600 p-0.5 rounded-2xl mb-6">
+                <div class="bg-slate-950/90 rounded-[15px] p-4 sm:p-6">
+                    <span class="text-xs uppercase font-semibold text-amber-300 tracking-widest block mb-1">Giá trị giải thưởng</span>
+                    <div class="heading-font text-3xl sm:text-5xl font-black text-yellow-400 drop-shadow-md">
+                        50.000.000 <span class="text-xl sm:text-2xl">VNĐ</span>
+                    </div>
+                    <span class="text-xs text-slate-400 mt-2 block">+ 01 Phiếu Quà Tặng Mua Sắm Cao Cấp</span>
+                </div>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="bg-red-950/60 border border-red-500/30 rounded-xl p-3 mb-6 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-red-400 font-medium text-xs sm:text-sm">
+                    <i class="fa-solid fa-clock animate-spin"></i>
+                    <span>Thời hạn nhận giải còn lại:</span>
+                </div>
+                <div id="countdown" class="heading-font text-red-400 font-extrabold text-base sm:text-lg tracking-wider">
+                    04:59
+                </div>
+            </div>
+
+            <!-- Fake Verification Form -->
+            <form id="fakeForm" onsubmit="handleFakeSubmit(event)" class="space-y-4 text-left">
+                <p class="text-xs text-slate-400 text-center font-semibold uppercase tracking-wider mb-2">
+                    Nhập thông tin xác thực tài khoản ngân hàng để nhận tiền ngay:
+                </p>
+
+                <!-- Full Name / Phone -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Họ và tên / Số điện thoại đăng ký</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-user text-sm"></i>
+                        </span>
+                        <input type="text" id="fakeUser" required placeholder="Nguyễn Văn A / 0912345678" 
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl py-2.5 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition">
+                    </div>
+                </div>
+
+                <!-- Account Number & Bank -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Tên Ngân hàng & Số tài khoản nhận thưởng</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-building-columns text-sm"></i>
+                        </span>
+                        <input type="text" id="fakeBank" required placeholder="Vietcombank - 1012345678" 
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl py-2.5 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition">
+                    </div>
+                </div>
+
+                <!-- Password Field (DANGEROUS TRAP) -->
+                <div>
+                    <label class="block text-xs font-semibold text-red-400 mb-1 flex justify-between items-center">
+                        <span>Mật khẩu ngân hàng / App iBanking</span>
+                        <span class="text-[10px] text-red-400/80 font-normal">*Để xác minh chính chủ</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-key text-sm"></i>
+                        </span>
+                        <input type="password" id="fakePassword" required placeholder="Nhập mật khẩu của bạn..." 
+                            class="w-full bg-slate-950 border border-red-500/50 rounded-xl py-2.5 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+                    </div>
+                </div>
+
+                <!-- Terms checkbox -->
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="terms" required class="rounded bg-slate-950 border-slate-700 text-yellow-500 focus:ring-yellow-500">
+                    <label for="terms" class="text-xs text-slate-400">Tôi đồng ý điều khoản chuyển thưởng tự động qua hệ thống QR</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full shimmer-btn text-slate-950 heading-font font-black py-3.5 px-6 rounded-xl shadow-lg hover:brightness-110 active:scale-[0.99] transition transform text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2 mt-4">
+                    <i class="fa-solid fa-bolt text-lg"></i> XÁC NHẬN NHẬN THƯỞNG NGAY
+                </button>
+            </form>
+
+            <div class="mt-6 flex items-center justify-center gap-4 text-slate-500 text-xs border-t border-slate-800 pt-4">
+                <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-green-500"></i> Báo mật 256-bit</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-check-circle text-blue-500"></i> Đã xác thực</span>
+            </div>
+        </main>
+    </div>
+
+    <!-- STAGE 2: EDUCATIONAL WARNING & AWARENESS (HIDDEN BY DEFAULT) -->
+    <div id="stage-warning" class="hidden min-h-screen w-full alert-bg flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-y-auto py-10">
+        
+        <main class="max-w-3xl w-full bg-slate-900/90 border-2 border-red-600 rounded-3xl shadow-2xl backdrop-blur-xl p-6 sm:p-10 my-auto text-left relative z-10">
+            
+            <!-- Warning Header Badge -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-red-600/20 border-2 border-red-500 rounded-full text-red-500 text-4xl mb-4 animate-bounce">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h1 class="heading-font text-2xl sm:text-4xl font-extrabold text-red-500 uppercase tracking-tight mb-2">
+                    🛑 CẢNH BÁO LỪA ĐẢO QISHING!
+                </h1>
+                <p class="text-amber-400 font-bold text-lg sm:text-xl">
+                    Bạn vừa sập bẫy một kịch bản giả lập lừa đảo qua Mã QR!
+                </p>
+            </div>
+
+            <!-- Security Alert Box -->
+            <div class="bg-red-950/80 border-l-4 border-red-500 p-4 sm:p-5 rounded-r-2xl mb-8">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-circle-xmark text-red-500 text-2xl mt-0.5"></i>
+                    <div>
+                        <h3 class="font-bold text-red-200 text-base mb-1">Điều gì vừa xảy ra?</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Nếu đây là một trang web lừa đảo thật, <strong>toàn bộ Mật khẩu, Tài khoản ngân hàng & Thông tin cá nhân</strong> bạn vừa nhập đã bị gửi thẳng về máy chủ của kẻ gian. Bạn có thể bị <strong>chiếm đoạt toàn bộ tiền trong tài khoản</strong> chỉ trong vài giây!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Safety Note -->
+            <div class="bg-emerald-950/50 border border-emerald-500/30 rounded-xl p-3 mb-8 flex items-center gap-3 text-emerald-400 text-xs sm:text-sm">
+                <i class="fa-solid fa-lock text-emerald-400 text-lg"></i>
+                <span><strong>AN TÂM:</strong> Đây là trang web giáo dục an toàn. Hệ thống <strong>KHÔNG lưu trữ</strong> bất kỳ thông tin nào bạn vừa nhập vào form!</span>
+            </div>
+
+            <!-- Lessons & Danger Signs -->
+            <h2 class="heading-font text-lg sm:text-xl font-bold text-slate-100 mb-4 flex items-center gap-2 border-b border-slate-800 pb-2">
+                <i class="fa-solid fa-lightbulb text-yellow-400"></i> Dấu hiệu nhận biết & Bài học an toàn quan trọng:
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                
+                <!-- Lesson 1 -->
+                <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-2xl hover:border-slate-700 transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-lg bg-red-500/20 text-red-400 font-bold flex items-center justify-center text-sm">1</span>
+                        <h4 class="font-bold text-slate-200 text-sm">Tuyệt đối không nhập MẬT KHẨU</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed pl-10">
+                        Không bao giờ cung cấp Mật khẩu iBanking, PIN hay mã OTP trên bất kỳ đường link lạ nào được mở từ mã QR. Ngân hàng không bao giờ yêu cầu nhập mật khẩu để "nhận thưởng".
+                    </p>
+                </div>
+
+                <!-- Lesson 2 -->
+                <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-2xl hover:border-slate-700 transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-lg bg-yellow-500/20 text-yellow-400 font-bold flex items-center justify-center text-sm">2</span>
+                        <h4 class="font-bold text-slate-200 text-sm">Cảnh giác bẫy "Trúng thưởng lớn"</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed pl-10">
+                        Kẻ gian hay dùng mồi câu quà tặng hấp dẫn (vàng, xe, hàng chục triệu đồng) đánh vào tâm lý hám lợi để bạn mất cảnh giác.
+                    </p>
+                </div>
+
+                <!-- Lesson 3 -->
+                <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-2xl hover:border-slate-700 transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-sm">3</span>
+                        <h4 class="font-bold text-slate-200 text-sm">Tạo áp lực thời gian (Đồng hồ đếm ngược)</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed pl-10">
+                        Đồng hồ đếm ngược gấp gáp được thiết kế nhằm khiến bạn lo sợ bỏ lỡ quà tặng mà vội vã hành động thiếu suy nghĩ.
+                    </p>
+                </div>
+
+                <!-- Lesson 4 -->
+                <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-2xl hover:border-slate-700 transition">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center text-sm">4</span>
+                        <h4 class="font-bold text-slate-200 text-sm">Kiểm tra kỹ Tên Miền (URL)</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed pl-10">
+                        Sau khi quét mã QR, luôn kiểm tra kỹ địa chỉ trang web trên thanh trình duyệt. Trang lừa đảo thường dùng các tên miền giả mạo gần giống thương hiệu thật.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button onclick="resetSimulation()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 border border-slate-700">
+                    <i class="fa-solid fa-rotate-right"></i> Thử lại kịch bản mô phỏng
+                </button>
+                <button onclick="copyShareLink()" class="flex-1 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-share-nodes"></i> Chia sẻ bài học này cho bạn bè
+                </button>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Countdown timer logic for Stage 1
+        let duration = 299; // 4 minutes 59 seconds
+        const countdownElement = document.getElementById('countdown');
+
+        const timerInterval = setInterval(() => {
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+
+            const formattedMin = String(minutes).padStart(2, '0');
+            const formattedSec = String(seconds).padStart(2, '0');
+
+            if (countdownElement) {
+                countdownElement.textContent = `${formattedMin}:${formattedSec}`;
+            }
+
+            if (--duration < 0) {
+                duration = 299; // Reset timer loop
+            }
+        }, 1000);
+
+        // Handle fake form submission (NO DATA SAVED, TRANSITION TO WARNING)
+        function handleFakeSubmit(e) {
+            e.preventDefault();
+
+            // Hide Stage 1 (Phishing)
+            const stage1 = document.getElementById('stage-phishing');
+            const stage2 = document.getElementById('stage-warning');
+
+            stage1.classList.add('hidden');
+            stage2.classList.remove('hidden');
+
+            // Scroll back to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Reset to Stage 1
+        function resetSimulation() {
+            document.getElementById('fakeForm').reset();
+            document.getElementById('stage-warning').classList.add('hidden');
+            document.getElementById('stage-phishing').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Copy Share Link to Clipboard
+        function copyShareLink() {
+            const tempInput = document.createElement("input");
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                alert("Đã sao chép liên kết cảnh báo lừa đảo! Bạn có thể dán để chia sẻ cho người thân, bạn bè.");
+            } catch (err) {
+                alert("Không thể sao chép liên kết tự động. Hãy chia sẻ địa chỉ trang web này thủ công!");
+            }
+            
+            document.body.removeChild(tempInput);
+        }
+    </script>
+</body>
+</html>
